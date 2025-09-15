@@ -1,0 +1,90 @@
+:root {
+    --primary: #383838; /*popup background, most windows*/
+    --darker: #282828;
+    --defaultbutton: #027BFF; /*add todo, save, etc*/
+    --closebutton: #555; /*x buttons*/
+    --textcolor: #FFF;
+
+}
+
+body {
+  background-color: var(--primary);
+  color: var(--textcolor);
+  font-family: sans-serif;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.modal {
+  background: var(--primary);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 500px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+.modal-body textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box; /* Ensures padding doesn't affect the width */
+}
+
+.modal-footer {
+  text-align: right;
+  padding-top: 15px;
+}
+
+.general-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tasks-list {
+  margin-top: 20px;
+}
