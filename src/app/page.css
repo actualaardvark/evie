@@ -4,6 +4,8 @@
     --defaultbutton: #027BFF; /*add todo, save, etc*/
     --closebutton: #555; /*x buttons*/
     --textcolor: #FFF;
+    --textcolorblack: #000;
+    --redcolor: #b31b10;
 
 }
 
@@ -33,6 +35,15 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   width: 90%;
   max-width: 500px;
+}
+
+.discard-modal {
+  background: var(--primary);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 50%;
+  max-width: 250px;
 }
 
 .modal-header {
@@ -76,8 +87,33 @@ body {
   padding-top: 15px;
 }
 
+.discard-cancel-footer {
+  text-align: center;
+  padding-top: 15px;
+}
+
+.cancel-button {
+  background-color: #0000;
+  color: var(--defaultbutton);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  float: left;
+}
+
+.discard-button {
+  background-color: var(--redcolor);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  float: right;
+}
+
 .general-button {
-  background-color: #007bff;
+  background-color: var(--defaultbutton);
   color: white;
   border: none;
   padding: 10px 20px;
