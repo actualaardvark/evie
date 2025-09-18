@@ -1,17 +1,37 @@
 :root {
-    --primary: #383838; /*popup background, most windows*/
-    --darker: #282828;
-    --defaultbutton: #027BFF; /*add todo, save, etc*/
-    --closebutton: #555; /*x buttons*/
-    --textcolor: #FFF;
-    --textcolorblack: #000;
-    --redcolor: #b31b10;
+  /* Main palette */
+  --primary: #383838; /* popup background, most windows */
+  --darker: #282828;
+  --text-light: #FFF;
+  --text-dark: #000;
 
+  /* Button and accent colors */
+  --accent-blue: #027BFF; /* add todo, save, etc */
+  --accent-green: #28a745; /* complete button */
+  --accent-yellow: #ffc107; /* uncomplete button */
+  --accent-red: #b31b10; /* discard button */
+
+  /* Grayscale shades */
+  --gray-dark: #333;
+  --gray-medium: #555; /* close button, timer */
+  --gray-light: #eee; /* timer background */
+  --gray-lighter: #ccc; /* borders, dividers */
+  --gray-lightest: #ddd; /* borders, card border */
+  --semi-transparent-dark: rgba(0, 0, 0, 0.5); /* modal overlay */
+  --semi-transparent-shadow: rgba(0, 0, 0, 0.1);
+  --semi-transparent-shadow-dark: rgba(0, 0, 0, 0.15);
+
+  /* Card specific colors */
+  --card-background: #555;
+  --card-text: #FFF;
+  --completed-card-background: #1f381d;
+  --completed-card-border: #b3ffb3;
+  --deadline-color: #dc3545;
 }
 
 body {
   background-color: var(--primary);
-  color: var(--textcolor);
+  color: var(--text-light);
   font-family: sans-serif;
 }
 
@@ -21,18 +41,18 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: var(--semi-transparent-dark);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's on top of other content */
+  z-index: 1000;
 }
 
 .modal {
   background: var(--primary);
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--semi-transparent-shadow-dark);
   width: 90%;
   max-width: 500px;
 }
@@ -41,7 +61,7 @@ body {
   background: var(--primary);
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--semi-transparent-shadow-dark);
   width: 50%;
   max-width: 250px;
 }
@@ -50,7 +70,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--gray-lighter);
   padding-bottom: 10px;
   margin-bottom: 15px;
 }
@@ -64,22 +84,22 @@ body {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #555;
+  color: var(--gray-medium);
   padding: 0;
   line-height: 1;
 }
 
 .close-button:hover {
-  color: #000;
+  color: var(--text-dark);
 }
 
 .modal-body textarea {
   width: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid var(--gray-lightest);
   padding: 10px;
   border-radius: 4px;
   resize: vertical;
-  box-sizing: border-box; /* Ensures padding doesn't affect the width */
+  box-sizing: border-box;
 }
 
 .modal-footer {
@@ -93,8 +113,8 @@ body {
 }
 
 .cancel-button {
-  background-color: #0000;
-  color: var(--defaultbutton);
+  background-color: transparent;
+  color: var(--accent-blue);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -103,8 +123,8 @@ body {
 }
 
 .discard-button {
-  background-color: var(--redcolor);
-  color: white;
+  background-color: var(--accent-red);
+  color: var(--text-light);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -113,14 +133,143 @@ body {
 }
 
 .general-button {
-  background-color: var(--defaultbutton);
-  color: white;
+  background-color: var(--accent-blue);
+  color: var(--text-light);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.tasks-list {
-  margin-top: 20px;
+.tasks-container {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.task-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--gray-lightest);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--semi-transparent-shadow);
+  width: 300px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-header h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--card-text);
+}
+
+.card-body p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--card-text);
+  margin-bottom: 20px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.edit-button,
+.complete-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.edit-button {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+}
+
+.complete-button {
+  background-color: var(--accent-green);
+  color: var(--text-light);
+}
+
+.timer {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1em;
+  color: var(--gray-medium);
+  background-color: var(--gray-light);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.deadline {
+  color: var(--deadline-color);
+  font-size: 0.9em;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: var(--gray-lighter);
+  margin: 40px 0;
+}
+
+.completed-tasks-section {
+}
+
+.completed-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: color 0.2s ease-in-out;
+}
+
+.completed-header:hover {
+  color: var(--accent-blue);
+}
+
+.dropdown-arrow {
+  font-size: 1.2em;
+  transition: transform 0.2s ease-in-out;
+}
+
+.completed-dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.completed-dropdown-content.expanded {
+  max-height: 1000000px;
+}
+
+.completed-card {
+  background-color: var(--completed-card-background);
+  border-color: var(--completed-card-border);
+  opacity: 0.8;
+}
+
+.completed-label {
+  font-weight: bold;
+  color: var(--accent-green);
+}
+
+.uncomplete-button {
+  background-color: var(--accent-yellow);
+  color: var(--gray-dark);
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
