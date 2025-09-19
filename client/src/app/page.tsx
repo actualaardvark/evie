@@ -99,6 +99,7 @@ const App = () => {
       setTasks({ "tasks": tasks.tasks.filter(task => task.id !== id) });
       setCompletedTasks({ "tasks": [...completedTasks.tasks, taskToComplete] });
     }
+    sendDiscordMessage(`I just completed: ${taskToComplete.title}!!!`);
   };
 
   const handleUncompleteTask = (id) => {
@@ -116,6 +117,27 @@ const App = () => {
 
   const toggleCompletedTasks = () => {
     setShowCompletedTasks(!showCompletedTasks);
+  };
+
+  const sendDiscordMessage = async (message) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/complete-task', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      if (response.ok) {
+        console.log('Task completion logged on Discord.');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to send message:', errorData.error);
+      }
+    } catch (error) {
+      console.error('Network or server error:', error);
+    }
   };
 
   useEffect(() => {

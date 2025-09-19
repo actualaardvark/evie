@@ -1,0 +1,267 @@
+/* [project]/Desktop/Dev/evie/client/src/app/page.css [app-client] (css) */
+:root {
+  --primary: #383838;
+  --darker: #282828;
+  --text-light: #fff;
+  --text-dark: #000;
+  --accent-blue: #027bff;
+  --accent-green: #28a745;
+  --accent-yellow: #ffc107;
+  --accent-red: #b31b10;
+  --gray-dark: #333;
+  --gray-medium: #555;
+  --gray-light: #eee;
+  --gray-lighter: #ccc;
+  --gray-lightest: #ddd;
+  --semi-transparent-dark: rgba(0, 0, 0, .5);
+  --semi-transparent-shadow: rgba(0, 0, 0, .1);
+  --semi-transparent-shadow-dark: rgba(0, 0, 0, .15);
+  --card-background: #555;
+  --card-text: #fff;
+  --completed-card-background: #1f381d;
+  --completed-card-border: #b3ffb3;
+  --deadline-color: #dc3545;
+}
+
+body {
+  background-color: var(--primary);
+  color: var(--text-light);
+  font-family: sans-serif;
+}
+
+.modal-overlay {
+  background-color: var(--semi-transparent-dark);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.modal {
+  background: var(--primary);
+  box-shadow: 0 4px 12px var(--semi-transparent-shadow-dark);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+}
+
+.discard-modal {
+  background: var(--primary);
+  box-shadow: 0 4px 12px var(--semi-transparent-shadow-dark);
+  border-radius: 8px;
+  width: 50%;
+  max-width: 250px;
+  padding: 20px;
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--gray-lighter);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  display: flex;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.close-button {
+  cursor: pointer;
+  color: var(--gray-medium);
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.close-button:hover {
+  color: var(--text-dark);
+}
+
+.modal-body textarea {
+  border: 1px solid var(--gray-lightest);
+  resize: vertical;
+  box-sizing: border-box;
+  border-radius: 4px;
+  width: 100%;
+  padding: 10px;
+}
+
+.modal-footer {
+  text-align: right;
+  padding-top: 15px;
+}
+
+.discard-cancel-footer {
+  text-align: center;
+  padding-top: 15px;
+}
+
+.cancel-button {
+  color: var(--accent-blue);
+  cursor: pointer;
+  float: left;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.discard-button {
+  background-color: var(--accent-red);
+  color: var(--text-light);
+  cursor: pointer;
+  float: right;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.general-button {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.tasks-container {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+.task-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--gray-lightest);
+  box-shadow: 0 2px 4px var(--semi-transparent-shadow);
+  border-radius: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  padding: 15px;
+  display: flex;
+}
+
+.card-header h3 {
+  color: var(--card-text);
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.card-body p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--card-text);
+  margin-bottom: 20px;
+}
+
+.card-footer {
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  display: flex;
+}
+
+.edit-button, .complete-button {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+.edit-button {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+}
+
+.complete-button {
+  background-color: var(--accent-green);
+  color: var(--text-light);
+}
+
+.timer {
+  color: var(--gray-medium);
+  background-color: var(--gray-light);
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-family: Courier New, Courier, monospace;
+  font-size: 1em;
+}
+
+.deadline {
+  color: var(--deadline-color);
+  font-size: .9em;
+}
+
+.divider {
+  background: var(--gray-lighter);
+  border: 0;
+  height: 1px;
+  margin: 40px 0;
+}
+
+.completed-header {
+  cursor: pointer;
+  color: var(--text-light);
+  align-items: center;
+  gap: 10px;
+  transition: color .2s ease-in-out;
+  display: flex;
+}
+
+.completed-header:hover {
+  color: var(--accent-blue);
+}
+
+.dropdown-arrow {
+  font-size: 1.2em;
+  transition: transform .2s ease-in-out;
+}
+
+.completed-dropdown-content {
+  max-height: 0;
+  transition: max-height .3s ease-in-out;
+  overflow: hidden;
+}
+
+.completed-dropdown-content.expanded {
+  max-height: 1000000px;
+}
+
+.completed-card {
+  background-color: var(--completed-card-background);
+  border-color: var(--completed-card-border);
+  opacity: .8;
+}
+
+.completed-label {
+  color: var(--accent-green);
+  font-weight: bold;
+}
+
+.uncomplete-button {
+  background-color: var(--accent-yellow);
+  color: var(--gray-dark);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=Desktop_Dev_evie_client_src_app_page_51fdcb22.css.map*/
