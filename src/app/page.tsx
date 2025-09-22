@@ -23,18 +23,20 @@ const App = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [toasts, setToasts] = useState([]);
 
-  const [tasks, setTasks] = useState(() => {
-    // getting stored text
-    const saved = localStorage.getItem("tasks");
-    const initialValue = JSON.parse(saved);
-    return initialValue || {"tasks":[]};
-  });
+  const [tasks, setTasks] = useState({ "tasks": [] });
+  const [completedTasks, setCompletedTasks] = useState({ "tasks": [] });
 
-  const [completedTasks, setCompletedTasks] = useState(() => {
-    const savedCompleted = localStorage.getItem("completedTasks");
-    const initialValue = JSON.parse(savedCompleted);
-    return initialValue || { "tasks": [] };
-  });
+  // Use useEffect to load data from localStorage on the client
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+    const savedCompletedTasks = localStorage.getItem("completedTasks");
+    if (savedCompletedTasks) {
+      setCompletedTasks(JSON.parse(savedCompletedTasks));
+    }
+  }, []);
 
   console.log(tasks);
 
@@ -153,6 +155,7 @@ const App = () => {
 
   const sendDiscordMessage = async (message) => {
     try {
+      console.log("sendDiscordMessage");
       const response = await fetch('/api/sendMessage', {
         method: 'POST',
         headers: {
@@ -161,12 +164,12 @@ const App = () => {
         body: JSON.stringify({ message }),
       });
 
-      if (response.ok) {
-        addToast('Success', 'Task completion logged on Discord.', 'success');
-      } else {
-        const errorData = await response.json();
-        addToast('API Error', `Failed to send message: ${errorData.error}`, 'error');
-      }
+      // if (response.ok) {
+      //   addToast('Success', 'Task completion logged on Discord.', 'success');
+      // } else {
+      //   const errorData = await response.json();
+      //   addToast('API Error', `Failed to send message: ${errorData.error}`, 'error');
+      // }
     } catch (error) {
       console.error('Network or server error:', error);
       addToast('Network or server error', error, 'error');

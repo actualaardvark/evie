@@ -1,46 +1,50 @@
-// Sends mesasges from a bot
-
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+// /api/sendMessage.js
 const { Client, GatewayIntentBits } = require('discord.js');
 
-const app = express(); 
-const port = 3001; // Or any available port
-
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+// Initialize the Discord client outside of the handler function.
+// This allows Vercel to cache it for subsequent "cold starts"
+// which is a key performance optimization.
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+// Use an async function for the API handler
+module.exports = async (req, res) => {
+  // Check if the Discord client is already ready.
+  if (client.isReady()) {
+    console.log("Discord client is ready.");
+  } else {
+    // If not, log in to Discord.
+    // await the login to ensure the client is ready before proceeding.
+    await client.login(process.env.DISCORD_BOT_TOKEN);
+    console.log("Discord client logged in successfully.");
+  }
 
-app.use(cors());
-app.use(express.json());
+  // Check for the POST method as serverless functions can handle various methods.
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
 
-app.post('/api/sendMessage', (req, res) => {
-  console.log("message recieved from the frontend");
-  console.log(req.body);
-  const channelId = process.env.CHANNEL; 
-  const message = req.body.message;
+  // Get the message from the request body
+  const { message } = req.body;
 
-  const channel = client.channels.cache.get(channelId);
+  if (!message) {
+    return res.status(400).send('Message body is required.');
+  }
+
+  // Get the channel from the cached channels
+  const channel = client.channels.cache.get(process.env.CHANNEL);
 
   if (!channel) {
     return res.status(404).send('Channel not found.');
   }
 
-  channel.send(message)
-    .then(() => res.status(200).send('Message sent successfully.'))
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Failed to send message.');
-      });
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
-
-//https://discord.com/channels/1419466100986482701/1419466101716156438
+  try {
+    // Send the message and await the response.
+    await channel.send(message);
+    res.status(200).send('Message sent successfully.');
+  } catch (error) {
+    console.error('Failed to send message:', error);
+    res.status(500).send('Failed to send message.');
+  }
+};
