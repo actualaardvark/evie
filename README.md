@@ -56,15 +56,17 @@ The client will be hosted to [http://localhost:3000](http://localhost:3000). Hav
 
 The program is interfaced through the web app.
 
-Get started by adding a new task with the button or ctrl+n. Add a title and optional description, then click save to add it to your list. Once you've added your first task, it will appear as a card below, displaying the title, description, and how long you have been working on the given task. From there you are able to edit or mark the task complete.
+Get started by adding a new task with the button. Add a title and optional description, then click save to add it to your list. Once you've added your first task, it will appear as a card below, displaying the title, description, and how long you have been working on the given task. From there you are able to edit by clicking anywhere on the card or mark the task complete.
 
-When you mark a task complete, the program will automatically send a message to each of the channels in your `.env`.
+Whenever you create a new task or mark a task complete, the program will send a post request to the backend server, which will in turn message to the channel specified in `.env` via the discord bot.
+
+When you complete a task, the task is not deleted forever but instead goes to a separate `completedTasks` array. You can see and 'uncomplete' a task under the completed tasks dropdown.
 
 # Backend server
 
 The backend sends discord messages by creating an API endpoint on port 3001. When a task is completed on the frontend, it sends a POST request with the relevent message using the built-in `fetch` method.
 
-The API gets the contents of the POST request and reads all the webhook urls starting with `DISCORD_WEBHOOK_URL`. It then sends a POST request to each of those webhooks using your Discord authorization token in the header, sending the message to each channel.
+The API gets the contents of the POST request and reads all the webhook urls starting with `DISCORD_WEBHOOK_URL`. It takes the contents of the message and then uses the 
 
 
 

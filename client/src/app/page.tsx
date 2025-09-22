@@ -55,7 +55,8 @@ const App = () => {
 
   const handleConfirmModalConfirm = () => {
     setShowConfirmModal(false);
-    handleCloseModal()
+    handleCloseModal();
+    handleCloseEditModal();
   }
 
   const handleOpenEditModal = () => {
@@ -74,13 +75,20 @@ const App = () => {
   }
 
   const handleTryCloseModal = () => {
-    console.log("handleTryCloseModal")
-    if (draftTitle == '' && draftBodyText == '') {
-      handleCloseModal();
-    } else {
-      handleOpenConfirmModal();
+    if (showModal) {
+      if (draftTitle === '' && draftBodyText === '') {
+        handleCloseModal();
+      } else {
+        handleOpenConfirmModal();
+      }
+    } else if (showEditModal && editingTask) {
+      if (draftTitle === editingTask.title && draftBodyText === editingTask.body) {
+        handleCloseEditModal();
+      } else {
+        handleOpenConfirmModal();
+      }
     }
-  }
+  };
 
   const handleAddTask = () => {
     console.log("handleAddTask")
@@ -243,12 +251,12 @@ const App = () => {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+              document.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleTryCloseModal, handleOpenModal]); // The effect re-runs when showModal changes
 
   return (
-    <div>
+    <div className="main-container">
       <h1>Evie stop procrastinating!!!!!!!!!!!</h1>
       <ToastContainer />
       <button title="(ctrl+n)" className="general-button" onClick={handleOpenModal}>
@@ -354,8 +362,8 @@ const App = () => {
                 <TaskCard
                   key={task.id}
                   task={task}
-                  onEdit={handleEditTask}
                   onComplete={handleCompleteTask}
+                  onEdit={() => handleEditTask(task.id)}
                   isCompleted={false}
                 />
               ))}

@@ -1,31 +1,78 @@
-// components/taskcard.tsx
-'use client';
-
 import React, { useState, useEffect } from 'react';
+import '../page.css';
 
-const TaskCard = ({ task, onEdit, onComplete, onUncomplete, isCompleted }) => {
-  const [activeTime, setActiveTime] = useState(0);
-  const [startTime] = useState(task.id);
+const TaskCard = ({ task, onComplete, onUncomplete, isCompleted, onEdit }) => {
+  const [timeElapsed, setTimeElapsed] = useState('');
 
   useEffect(() => {
     if (!isCompleted) {
-      const timer = setInterval(() => {
-        setActiveTime(Math.floor((Date.now() - startTime) / 1000));
-      }, 1000);
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const created = task.id;
+        const diff = now - created;
 
-      return () => clearInterval(timer);
+        const seconds = Math.floor(diff / 1000)
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        let timeString = '';
+        if (days > 0) {
+          timeString += `${days}d `;
+        }
+        if (hours > 0) {
+          timeString += `${hours % 24}h `;
+        }
+        if (minutes > 0) {
+          timeString += `${minutes % 60}m `;
+        }
+        timeString += `${seconds % 60}s`;
+
+        setTimeElapsed(timeString);
+      }, 1000); // Update every minute
+
+      // Initial calculation
+      const now = Date.now();
+      const created = task.id;
+      const diff = now - created;
+
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      let timeString = '';
+      if (days > 0) {
+        timeString += `${days}d `;
+      }
+      if (hours > 0) {
+        timeString += `${hours % 24}h `;
+      }
+      if (minutes > 0) {
+        timeString += `${minutes % 60}m `;
+      }
+      timeString += `${seconds % 60}s`;
+      setTimeElapsed(timeString);
+
+      return () => clearInterval(interval);
     }
-  }, [startTime, isCompleted]);
+  }, [task.id, isCompleted]);
 
-  const formatTime = (seconds) => {
-    const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-    const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-    const s = (seconds % 60).toString().padStart(2, '0');
-    return `${h}:${m}:${s}`;
+  const handleCompleteClick = (e) => {
+    e.stopPropagation();
+    onComplete(task.id);
+  };
+
+  const handleUncompleteClick = (e) => {
+    e.stopPropagation();
+    onUncomplete(task.id);
   };
 
   return (
-    <div className={`task-card ${isCompleted ? 'completed-card' : ''}`}>
+    <li
+      className={`task-card ${isCompleted ? 'completed-card' : ''}`}
+      onClick={!isCompleted ? () => onEdit(task.id) : null}
+    >
       <div className="card-header">
         <h3>{task.title}</h3>
       </div>
@@ -33,20 +80,18 @@ const TaskCard = ({ task, onEdit, onComplete, onUncomplete, isCompleted }) => {
         <p>{task.body}</p>
       </div>
       <div className="card-footer">
-        {!isCompleted ? (
-          <>
-            <button onClick={() => onEdit(task.id)} className="edit-button">Edit</button>
-            <span className="timer">{formatTime(activeTime)}</span>
-            <button onClick={() => onComplete(task.id)} className="complete-button">Complete</button>
-          </>
+        {!isCompleted && <span className="timer">{timeElapsed}</span>}
+        {isCompleted ? (
+          <button className="uncomplete-button" onClick={handleUncompleteClick}>
+            Uncomplete
+          </button>
         ) : (
-          <>
-            <span className="completed-label">✅ Completed</span>
-            <button onClick={() => onUncomplete(task.id)} className="uncomplete-button">Uncomplete :(</button>
-          </>
+          <button className="complete-button" onClick={handleCompleteClick}>
+            Complete
+          </button>
         )}
       </div>
-    </div>
+    </li>
   );
 };
 

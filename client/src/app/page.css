@@ -1,39 +1,167 @@
+/* --- Global Styles & Variables --- */
+
 :root {
   /* Main palette */
-  --primary: #383838; /* popup background, most windows */
-  --darker: #282828;
+  --primary: #282828;
+  --darker: #1e1e1e;
   --text-light: #FFF;
   --text-dark: #000;
 
   /* Button and accent colors */
-  --accent-blue: #027BFF; /* add todo, save, etc */
-  --accent-green: #28a745; /* complete button */
-  --accent-yellow: #ffc107; /* uncomplete button */
-  --accent-red: #b31b10; /* discard button */
+  --accent-blue: #027BFF;
+  --accent-green: #28a745;
+  --accent-yellow: #ffc107;
+  --accent-red: #b31b10;
 
   /* Grayscale shades */
   --gray-dark: #333;
-  --gray-medium: #555; /* close button, timer */
-  --gray-light: #eee; /* timer background */
-  --gray-lighter: #ccc; /* borders, dividers */
-  --gray-lightest: #ddd; /* borders, card border */
-  --semi-transparent-dark: rgba(0, 0, 0, 0.5); /* modal overlay */
+  --gray-medium: #555;
+  --gray-light: #eee;
+  --gray-lighter: #ccc;
+  --gray-lightest: #ddd;
+  --semi-transparent-dark: rgba(0, 0, 0, 0.5);
   --semi-transparent-shadow: rgba(0, 0, 0, 0.1);
-  --semi-transparent-shadow-dark: rgba(0, 0, 0, 0.15);
+  --semi-transparent-shadow-dark: rgba(0, 0, 0, 0.25);
 
   /* Card specific colors */
-  --card-background: #555;
+  --card-background: #383838;
   --card-text: #FFF;
   --completed-card-background: #1f381d;
   --completed-card-border: #b3ffb3;
   --deadline-color: #dc3545;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--primary);
   color: var(--text-light);
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  padding: 20px;
+  margin: 0;
 }
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* --- Buttons --- */
+
+.general-button {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.general-button:hover {
+  background-color: #0060d0;
+  transform: translateY(-2px);
+}
+
+.main-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--gray-lighter);
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: var(--text-light);
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: var(--accent-blue);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  float: left;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.cancel-button:hover {
+  background-color: rgba(2, 123, 255, 0.1);
+}
+
+.discard-button {
+  background-color: var(--accent-red);
+  color: var(--text-light);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  float: right;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.discard-button:hover {
+  background-color: #8f160e;
+}
+
+.edit-button,
+.complete-button,
+.uncomplete-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+}
+
+.edit-button:hover {
+  background-color: #0060d0;
+}
+
+.complete-button {
+  background-color: var(--accent-green);
+  color: var(--text-light);
+}
+
+.complete-button:hover {
+  background-color: #218838;
+}
+
+.uncomplete-button {
+  background-color: var(--accent-yellow);
+  color: var(--gray-dark);
+}
+
+.uncomplete-button:hover {
+  background-color: #d39e00;
+}
+
+/* --- Modals & Overlays --- */
 
 .modal-overlay {
   position: fixed;
@@ -49,48 +177,36 @@ body {
 }
 
 .modal {
-  background: var(--primary);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 12px var(--semi-transparent-shadow-dark);
+  background: var(--darker);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .discard-modal {
-  background: var(--primary);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 12px var(--semi-transparent-shadow-dark);
+  background: var(--darker);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   width: 50%;
-  max-width: 250px;
+  max-width: 300px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--gray-lighter);
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+  border-bottom: 1px solid var(--gray-dark);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .modal-header h3 {
   margin: 0;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--gray-medium);
-  padding: 0;
-  line-height: 1;
-}
-
-.close-button:hover {
-  color: var(--text-dark);
 }
 
 .input-container {
@@ -102,19 +218,21 @@ body {
 .input-body {
   width: 100%;
   border: 1px solid var(--gray-medium);
-  background-color: var(--darker);
+  background-color: var(--primary);
   color: var(--text-light);
-  padding: 10px;
-  border-radius: 4px;
+  padding: 12px;
+  border-radius: 8px;
   box-sizing: border-box;
   font-family: inherit;
   font-size: 16px;
+  transition: border-color 0.2s ease-in-out;
 }
 
 .input-title:focus,
 .input-body:focus {
   outline: none;
   border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(2, 123, 255, 0.3);
 }
 
 .input-body {
@@ -126,7 +244,7 @@ body {
   top: 10px;
   right: 10px;
   font-size: 12px;
-  color: var(--gray-lighter);
+  color: var(--gray-medium);
 }
 
 .modal-footer {
@@ -135,38 +253,12 @@ body {
 }
 
 .discard-cancel-footer {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
   padding-top: 15px;
 }
 
-.cancel-button {
-  background-color: transparent;
-  color: var(--accent-blue);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  float: left;
-}
-
-.discard-button {
-  background-color: var(--accent-red);
-  color: var(--text-light);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  float: right;
-}
-
-.general-button {
-  background-color: var(--accent-blue);
-  color: var(--text-light);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* --- Task Lists & Cards --- */
 
 .tasks-container {
   list-style: none;
@@ -179,27 +271,36 @@ body {
 
 .task-card {
   background-color: var(--card-background);
-  border: 1px solid var(--gray-lightest);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px var(--semi-transparent-shadow);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--semi-transparent-shadow);
   width: 300px;
-  padding: 15px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px var(--semi-transparent-shadow-dark);
 }
 
 .card-header h3 {
   margin-top: 0;
   margin-bottom: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--card-text);
 }
 
 .card-body p {
   white-space: pre-wrap;
   word-wrap: break-word;
-  color: var(--card-text);
+  color: var(--gray-lighter);
   margin-bottom: 20px;
+  font-size: 0.95rem;
 }
 
 .card-footer {
@@ -209,75 +310,11 @@ body {
   margin-top: auto;
 }
 
-.edit-button,
-.complete-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.edit-button {
-  background-color: var(--accent-blue);
-  color: var(--text-light);
-}
-
-.complete-button {
-  background-color: var(--accent-green);
-  color: var(--text-light);
-}
-
 .timer {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1em;
-  color: var(--gray-medium);
-  background-color: var(--gray-light);
-  padding: 5px 10px;
-  border-radius: 4px;
-}
-
-.deadline {
-  color: var(--deadline-color);
   font-size: 0.9em;
-}
-
-.divider {
-  border: 0;
-  height: 1px;
-  background: var(--gray-lighter);
-  margin: 40px 0;
-}
-
-.completed-tasks-section {
-}
-
-.completed-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  color: var(--text-light);
-  transition: color 0.2s ease-in-out;
-}
-
-.completed-header:hover {
-  color: var(--accent-blue);
-}
-
-.dropdown-arrow {
-  font-size: 1.2em;
-  transition: transform 0.2s ease-in-out;
-}
-
-.completed-dropdown-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-}
-
-.completed-dropdown-content.expanded {
-  max-height: 1000000px;
+  color: var(--gray-lighter);
+  padding: 5px 0;
 }
 
 .completed-card {
@@ -286,9 +323,52 @@ body {
   opacity: 0.8;
 }
 
-.completed-label {
-  font-weight: bold;
+/* --- Completed Tasks Section --- */
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: var(--gray-dark);
+  margin: 40px 0;
+}
+
+.completed-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--gray-lighter);
+  transition: color 0.2s ease-in-out;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.completed-header:hover {
+  color: var(--text-light);
+  background-color: var(--darker);
+}
+
+.dropdown-arrow {
+  font-size: 1.2em;
+  transition: transform 0.3s ease-in-out;
+}
+
+.completed-dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.completed-dropdown-content.expanded {
+  max-height: 1000px;
+}
+
+.success-message {
   color: var(--accent-green);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .uncomplete-button {
@@ -301,8 +381,8 @@ body {
   font-weight: bold;
 }
 
+/* --- Toasts --- */
 
-/* Toast container styling */
 .toast-container {
   position: fixed;
   top: 1rem;
@@ -310,7 +390,6 @@ body {
   z-index: 50;
 }
 
-/* Base toast message styling */
 .toast {
   display: flex;
   align-items: center;
@@ -337,7 +416,6 @@ body {
   font-size: 0.875rem;
 }
 
-/* Specific toast color themes */
 .toast--success {
   background-color: #dcfce7;
   color: #15803d;
@@ -352,6 +430,8 @@ body {
   background-color: #dbeafe;
   color: #1e40af;
 }
+
+/* --- Animations --- */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }

@@ -8,38 +8,77 @@ module.exports = mod;
 "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// components/taskcard.tsx
 __turbopack_context__.s([
     "default",
     ()=>__TURBOPACK__default__export__
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/Dev/evie/client/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/Dev/evie/client/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
-'use client';
 ;
 ;
-const TaskCard = ({ task, onEdit, onComplete, onUncomplete, isCompleted })=>{
-    const [activeTime, setActiveTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
-    const [startTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(task.id);
+;
+const TaskCard = ({ task, onComplete, onUncomplete, isCompleted, onEdit })=>{
+    const [timeElapsed, setTimeElapsed] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (!isCompleted) {
-            const timer = setInterval(()=>{
-                setActiveTime(Math.floor((Date.now() - startTime) / 1000));
-            }, 1000);
-            return ()=>clearInterval(timer);
+            const interval = setInterval(()=>{
+                const now = Date.now();
+                const created = task.id;
+                const diff = now - created;
+                const seconds = Math.floor(diff / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                let timeString = '';
+                if (days > 0) {
+                    timeString += `${days}d `;
+                }
+                if (hours > 0) {
+                    timeString += `${hours % 24}h `;
+                }
+                if (minutes > 0) {
+                    timeString += `${minutes % 60}m `;
+                }
+                timeString += `${seconds % 60}s`;
+                setTimeElapsed(timeString);
+            }, 1000); // Update every minute
+            // Initial calculation
+            const now = Date.now();
+            const created = task.id;
+            const diff = now - created;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            let timeString = '';
+            if (days > 0) {
+                timeString += `${days}d `;
+            }
+            if (hours > 0) {
+                timeString += `${hours % 24}h `;
+            }
+            if (minutes > 0) {
+                timeString += `${minutes % 60}m `;
+            }
+            timeString += `${seconds % 60}s`;
+            setTimeElapsed(timeString);
+            return ()=>clearInterval(interval);
         }
     }, [
-        startTime,
+        task.id,
         isCompleted
     ]);
-    const formatTime = (seconds)=>{
-        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-        const m = Math.floor(seconds % 3600 / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
-        return `${h}:${m}:${s}`;
+    const handleCompleteClick = (e)=>{
+        e.stopPropagation();
+        onComplete(task.id);
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+    const handleUncompleteClick = (e)=>{
+        e.stopPropagation();
+        onUncomplete(task.id);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
         className: `task-card ${isCompleted ? 'completed-card' : ''}`,
+        onClick: !isCompleted ? ()=>onEdit(task.id) : null,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "card-header",
@@ -47,12 +86,12 @@ const TaskCard = ({ task, onEdit, onComplete, onUncomplete, isCompleted })=>{
                     children: task.title
                 }, void 0, false, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                    lineNumber: 30,
+                    lineNumber: 77,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                lineNumber: 29,
+                lineNumber: 76,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -61,75 +100,52 @@ const TaskCard = ({ task, onEdit, onComplete, onUncomplete, isCompleted })=>{
                     children: task.body
                 }, void 0, false, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                    lineNumber: 33,
+                    lineNumber: 80,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                lineNumber: 32,
+                lineNumber: 79,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "card-footer",
-                children: !isCompleted ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: ()=>onEdit(task.id),
-                            className: "edit-button",
-                            children: "Edit"
-                        }, void 0, false, {
-                            fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                            lineNumber: 38,
-                            columnNumber: 13
-                        }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            className: "timer",
-                            children: formatTime(activeTime)
-                        }, void 0, false, {
-                            fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                            lineNumber: 39,
-                            columnNumber: 13
-                        }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: ()=>onComplete(task.id),
-                            className: "complete-button",
-                            children: "Complete"
-                        }, void 0, false, {
-                            fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                            lineNumber: 40,
-                            columnNumber: 13
-                        }, ("TURBOPACK compile-time value", void 0))
-                    ]
-                }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            className: "completed-label",
-                            children: "✅ Completed"
-                        }, void 0, false, {
-                            fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                            lineNumber: 44,
-                            columnNumber: 13
-                        }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: ()=>onUncomplete(task.id),
-                            className: "uncomplete-button",
-                            children: "Uncomplete :("
-                        }, void 0, false, {
-                            fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                            lineNumber: 45,
-                            columnNumber: 13
-                        }, ("TURBOPACK compile-time value", void 0))
-                    ]
-                }, void 0, true)
-            }, void 0, false, {
+                children: [
+                    !isCompleted && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "timer",
+                        children: timeElapsed
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
+                        lineNumber: 83,
+                        columnNumber: 26
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    isCompleted ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        className: "uncomplete-button",
+                        onClick: handleUncompleteClick,
+                        children: "Uncomplete"
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
+                        lineNumber: 85,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        className: "complete-button",
+                        onClick: handleCompleteClick,
+                        children: "Complete"
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
+                        lineNumber: 89,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-                lineNumber: 35,
+                lineNumber: 82,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/Dev/evie/client/src/app/components/taskcard.tsx",
-        lineNumber: 28,
+        lineNumber: 72,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -197,6 +213,7 @@ const App = ()=>{
     const handleConfirmModalConfirm = ()=>{
         setShowConfirmModal(false);
         handleCloseModal();
+        handleCloseEditModal();
     };
     const handleOpenEditModal = ()=>{
         setShowEditModal(true);
@@ -211,11 +228,18 @@ const App = ()=>{
         setShowConfirmModal(false);
     };
     const handleTryCloseModal = ()=>{
-        console.log("handleTryCloseModal");
-        if (draftTitle == '' && draftBodyText == '') {
-            handleCloseModal();
-        } else {
-            handleOpenConfirmModal();
+        if (showModal) {
+            if (draftTitle === '' && draftBodyText === '') {
+                handleCloseModal();
+            } else {
+                handleOpenConfirmModal();
+            }
+        } else if (showEditModal && editingTask) {
+            if (draftTitle === editingTask.title && draftBodyText === editingTask.body) {
+                handleCloseEditModal();
+            } else {
+                handleOpenConfirmModal();
+            }
         }
     };
     const handleAddTask = ()=>{
@@ -354,7 +378,7 @@ const App = ()=>{
                     children: title
                 }, void 0, false, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                    lineNumber: 192,
+                    lineNumber: 200,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -362,13 +386,13 @@ const App = ()=>{
                     children: message
                 }, void 0, false, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                    lineNumber: 193,
+                    lineNumber: 201,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-            lineNumber: 191,
+            lineNumber: 199,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     };
@@ -379,12 +403,12 @@ const App = ()=>{
                     ...toast
                 }, toast.id, false, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                    lineNumber: 202,
+                    lineNumber: 210,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)))
         }, void 0, false, {
             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-            lineNumber: 200,
+            lineNumber: 208,
             columnNumber: 5
         }, ("TURBOPACK compile-time value", void 0));
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
@@ -435,17 +459,18 @@ const App = ()=>{
         handleOpenModal
     ]); // The effect re-runs when showModal changes
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "main-container",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                 children: "Evie stop procrastinating!!!!!!!!!!!"
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 252,
+                lineNumber: 260,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ToastContainer, {}, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 253,
+                lineNumber: 261,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -455,7 +480,7 @@ const App = ()=>{
                 children: "Add a New Task"
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 254,
+                lineNumber: 262,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             showModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -470,7 +495,7 @@ const App = ()=>{
                                     children: "Add a New Task"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 262,
+                                    lineNumber: 270,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -480,13 +505,13 @@ const App = ()=>{
                                     children: "×"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 263,
+                                    lineNumber: 271,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 261,
+                            lineNumber: 269,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -503,7 +528,7 @@ const App = ()=>{
                                             className: "input-title"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                            lineNumber: 269,
+                                            lineNumber: 277,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -514,13 +539,13 @@ const App = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                            lineNumber: 276,
+                                            lineNumber: 284,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 268,
+                                    lineNumber: 276,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -531,13 +556,13 @@ const App = ()=>{
                                     className: "input-body"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 278,
+                                    lineNumber: 286,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 267,
+                            lineNumber: 275,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -548,23 +573,23 @@ const App = ()=>{
                                 children: "Save"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                lineNumber: 287,
+                                lineNumber: 295,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 286,
+                            lineNumber: 294,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                    lineNumber: 260,
+                    lineNumber: 268,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 259,
+                lineNumber: 267,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             showEditModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -579,7 +604,7 @@ const App = ()=>{
                                     children: "Edit Task"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 297,
+                                    lineNumber: 305,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -589,13 +614,13 @@ const App = ()=>{
                                     children: "×"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 298,
+                                    lineNumber: 306,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 296,
+                            lineNumber: 304,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -612,7 +637,7 @@ const App = ()=>{
                                             className: "input-title"
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                            lineNumber: 304,
+                                            lineNumber: 312,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -623,13 +648,13 @@ const App = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                            lineNumber: 311,
+                                            lineNumber: 319,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 303,
+                                    lineNumber: 311,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -640,13 +665,13 @@ const App = ()=>{
                                     className: "input-body"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 313,
+                                    lineNumber: 321,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 302,
+                            lineNumber: 310,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -657,23 +682,23 @@ const App = ()=>{
                                 children: "Update"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                lineNumber: 322,
+                                lineNumber: 330,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 321,
+                            lineNumber: 329,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                    lineNumber: 295,
+                    lineNumber: 303,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 294,
+                lineNumber: 302,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             showConfirmModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -687,12 +712,12 @@ const App = ()=>{
                                 children: "Discard changes?"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                lineNumber: 332,
+                                lineNumber: 340,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 331,
+                            lineNumber: 339,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -704,7 +729,7 @@ const App = ()=>{
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 335,
+                                    lineNumber: 343,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -713,24 +738,24 @@ const App = ()=>{
                                     children: "Discard"
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 336,
+                                    lineNumber: 344,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 334,
+                            lineNumber: 342,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                    lineNumber: 330,
+                    lineNumber: 338,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 329,
+                lineNumber: 337,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -740,7 +765,7 @@ const App = ()=>{
                         children: "Tasks"
                     }, void 0, false, {
                         fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                        lineNumber: 343,
+                        lineNumber: 351,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -748,47 +773,47 @@ const App = ()=>{
                             children: "Add a task to get started!"
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 347,
+                            lineNumber: 355,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             children: "You've finished all your tasks! Good job!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 349,
+                            lineNumber: 357,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                             className: "tasks-container",
                             children: tasks.tasks.map((task)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$src$2f$app$2f$components$2f$taskcard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                     task: task,
-                                    onEdit: handleEditTask,
                                     onComplete: handleCompleteTask,
+                                    onEdit: ()=>handleEditTask(task.id),
                                     isCompleted: false
                                 }, task.id, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 354,
+                                    lineNumber: 362,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0)))
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 352,
+                            lineNumber: 360,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                        lineNumber: 344,
+                        lineNumber: 352,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 342,
+                lineNumber: 350,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {
                 className: "divider"
             }, void 0, false, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 367,
+                lineNumber: 375,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -804,13 +829,13 @@ const App = ()=>{
                                 children: showCompletedTasks ? '▼' : '►'
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                lineNumber: 372,
+                                lineNumber: 380,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                        lineNumber: 370,
+                        lineNumber: 378,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -819,7 +844,7 @@ const App = ()=>{
                             children: "No completed tasks yet."
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 376,
+                            lineNumber: 384,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$Dev$2f$evie$2f$client$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                             className: "tasks-container",
@@ -829,29 +854,29 @@ const App = ()=>{
                                     isCompleted: true
                                 }, task.id, false, {
                                     fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                                    lineNumber: 380,
+                                    lineNumber: 388,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0)))
                         }, void 0, false, {
                             fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                            lineNumber: 378,
+                            lineNumber: 386,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                        lineNumber: 374,
+                        lineNumber: 382,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-                lineNumber: 369,
+                lineNumber: 377,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/Dev/evie/client/src/app/page.tsx",
-        lineNumber: 251,
+        lineNumber: 259,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
