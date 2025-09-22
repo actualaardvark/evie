@@ -66,8 +66,7 @@ When you complete a task, the task is not deleted forever but instead goes to a 
 
 The backend sends discord messages by creating an API endpoint on port 3001. When a task is completed on the frontend, it sends a POST request with the relevent message using the built-in `fetch` method.
 
-The API gets the contents of the POST request and reads all the webhook urls starting with `DISCORD_WEBHOOK_URL`. It takes the contents of the message and then uses the 
-
+The API gets the contents of the POST request and reads all the webhook urls starting with `DISCORD_WEBHOOK_URL`. It takes the contents of the message and then uses the discord API to send the message through the bot.
 
 
 

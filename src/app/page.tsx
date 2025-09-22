@@ -153,7 +153,7 @@ const App = () => {
 
   const sendDiscordMessage = async (message) => {
     try {
-      const response = await fetch('http://localhost:3001/api/sendMessage', {
+      const response = await fetch('/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

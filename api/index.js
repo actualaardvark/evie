@@ -5,7 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const { Client, GatewayIntentBits } = require('discord.js');
 
-const app = express();
+const app = express(); 
 const port = 3001; // Or any available port
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
