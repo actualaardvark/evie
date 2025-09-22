@@ -20,6 +20,8 @@ const App = () => {
   const [draftBodyText, setDraftBodyText] = useState('');
   const [draftTitle, setDraftTitle] = useState('');
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [toasts, setToasts] = useState([]);
 
   const [tasks, setTasks] = useState(() => {
     // getting stored text
@@ -62,6 +64,9 @@ const App = () => {
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
+    setDraftTitle('');
+    setDraftBodyText('');
+    setEditingTask(null);
   }
 
   const handleConfirmModalCancel = () => {
@@ -80,6 +85,7 @@ const App = () => {
   const handleAddTask = () => {
     console.log("handleAddTask")
     if (draftTitle.trim() !== '') {
+      sendDiscordMessage(`Evie just added the task: "${draftTitle}"`);
       const newID = Date.now()
       const newTask = new Task(newID, draftTitle, draftBodyText)
       setTasks({"tasks": [...tasks.tasks, newTask]});
@@ -93,13 +99,25 @@ const App = () => {
     }
   };
 
+  const handleUpdateTask = () => {
+    if (draftTitle.trim() !== '' && editingTask) {
+      const updatedTasks = tasks.tasks.map(task => 
+        task.id === editingTask.id ? { ...task, title: draftTitle, body: draftBodyText } : task
+      );
+      setTasks({"tasks": updatedTasks});
+      handleCloseEditModal();
+    } else if (draftBodyText === '') {
+      handleCloseEditModal();
+    }
+  };
+
   const handleCompleteTask = (id) => {
     const taskToComplete = tasks.tasks.find(task => task.id === id);
     if (taskToComplete) {
       setTasks({ "tasks": tasks.tasks.filter(task => task.id !== id) });
       setCompletedTasks({ "tasks": [...completedTasks.tasks, taskToComplete] });
     }
-    sendDiscordMessage(`I just completed: ${taskToComplete.title}!!!`);
+    sendDiscordMessage(`Evie just completed: "${taskToComplete.title}"!`);
   };
 
   const handleUncompleteTask = (id) => {
@@ -107,12 +125,18 @@ const App = () => {
     if (taskToUncomplete) {
       setCompletedTasks({ "tasks": completedTasks.tasks.filter(task => task.id !== id) });
       setTasks({ "tasks": [...tasks.tasks, taskToUncomplete] });
+    sendDiscordMessage(`Evie just added the task: ${taskToUncomplete.title}`);
     }
   };
 
   const handleEditTask = (id) => {
-    //idk
-    console.log(`Editing task with ID: ${id}`);
+    const taskToEdit = tasks.tasks.find(task => task.id === id);
+    if (taskToEdit) {
+      setEditingTask(taskToEdit);
+      setDraftTitle(taskToEdit.title);
+      setDraftBodyText(taskToEdit.body);
+      handleOpenEditModal();
+    }
   };
 
   const toggleCompletedTasks = () => {
@@ -121,7 +145,7 @@ const App = () => {
 
   const sendDiscordMessage = async (message) => {
     try {
-      const response = await fetch('http://localhost:3001/api/complete-task', {
+      const response = await fetch('http://localhost:3001/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,15 +154,55 @@ const App = () => {
       });
 
       if (response.ok) {
-        console.log('Task completion logged on Discord.');
+        addToast('Success', 'Task completion logged on Discord.', 'success');
       } else {
         const errorData = await response.json();
-        console.error('Failed to send message:', errorData.error);
+        addToast('API Error', `Failed to send message: ${errorData.error}`, 'error');
       }
     } catch (error) {
       console.error('Network or server error:', error);
+      addToast('Network or server error', error, 'error');
     }
   };
+
+  const addToast = (title, message, type = 'info') => {
+    const id = Date.now();
+    const newToast = { id, title, message, type, isFadingOut: false };
+    setToasts((prevToasts) => [...prevToasts, newToast]);
+
+    // Set a timeout to start the fade-out animation
+    setTimeout(() => {
+      setToasts((prevToasts) =>
+        prevToasts.map((toast) =>
+          toast.id === id ? { ...toast, isFadingOut: true } : toast
+        )
+      );
+    }, 4500); // Start fade-out animation 500ms before it's removed
+
+    // Remove the toast from state after the animation completes
+    setTimeout(() => {
+      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+    }, 5000);
+  };
+
+  const Toast = ({ title, message, type, isFadingOut }) => {
+    const className = `toast toast--${type} ${isFadingOut ? 'fading-out' : ''}`;
+    return (
+      <div className={className} role="alert">
+        <div className="toast__title">{title}</div>
+        <div className="toast__message">{message}</div>
+      </div>
+    );
+  };
+
+  // Container component to hold and display all toasts
+  const ToastContainer = () => (
+    <div className="toast-container">
+      {toasts.map((toast) => (
+        <Toast key={toast.id} {...toast} />
+      ))}
+    </div>
+  );
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -184,42 +248,79 @@ const App = () => {
   }, [handleTryCloseModal, handleOpenModal]); // The effect re-runs when showModal changes
 
   return (
-
     <div>
       <h1>Evie stop procrastinating!!!!!!!!!!!</h1>
+      <ToastContainer />
       <button title="(ctrl+n)" className="general-button" onClick={handleOpenModal}>
         Add a New Task
       </button>
-
+      
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
               <h3>Add a New Task</h3>
-              <input
-                value={draftTitle}
-                onChange={(e) => setDraftTitle(e.target.value)}
-                placeholder="Title"
-              />
               <button title="(esc)" className="close-button" onClick={handleTryCloseModal}>
                 &times;
               </button>
-              
             </div>
             <div className="modal-body">
+              <div className="input-container">
+                <input
+                  type="text"
+                  value={draftTitle}
+                  onChange={(e) => setDraftTitle(e.target.value.slice(0, 100))}
+                  placeholder="Title"
+                  className="input-title"
+                />
+                <span className="char-counter">{draftTitle.length}/100</span>
+              </div>
               <textarea
                 value={draftBodyText}
                 onChange={(e) => setDraftBodyText(e.target.value)}
-                placeholder="Start typing here..."
-                //size of text input box
+                placeholder="Start typing a description (optional)..."
                 rows="8"
+                className="input-body"
               />
             </div>
             <div className="modal-footer">
               <button className="general-button" onClick={handleAddTask}>Save</button>
             </div>
-
-
+          </div>
+        </div>
+      )}
+      
+      {showEditModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Edit Task</h3>
+              <button title="(esc)" className="close-button" onClick={handleCloseEditModal}>
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="input-container">
+                <input
+                  type="text"
+                  value={draftTitle}
+                  onChange={(e) => setDraftTitle(e.target.value.slice(0, 100))}
+                  placeholder="Title"
+                  className="input-title"
+                />
+                <span className="char-counter">{draftTitle.length}/100</span>
+              </div>
+              <textarea
+                value={draftBodyText}
+                onChange={(e) => setDraftBodyText(e.target.value)}
+                placeholder="Start typing a description (optional)..."
+                rows="8"
+                className="input-body"
+              />
+            </div>
+            <div className="modal-footer">
+              <button className="general-button" onClick={handleUpdateTask}>Update</button>
+            </div>
           </div>
         </div>
       )}

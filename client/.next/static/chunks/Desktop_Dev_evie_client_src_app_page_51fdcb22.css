@@ -87,13 +87,38 @@ body {
   color: var(--text-dark);
 }
 
-.modal-body textarea {
-  border: 1px solid var(--gray-lightest);
-  resize: vertical;
+.input-container {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.input-title, .input-body {
+  border: 1px solid var(--gray-medium);
+  background-color: var(--darker);
+  width: 100%;
+  color: var(--text-light);
   box-sizing: border-box;
   border-radius: 4px;
-  width: 100%;
   padding: 10px;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.input-title:focus, .input-body:focus {
+  border-color: var(--accent-blue);
+  outline: none;
+}
+
+.input-body {
+  resize: vertical;
+}
+
+.char-counter {
+  color: var(--gray-lighter);
+  font-size: 12px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .modal-footer {
@@ -262,6 +287,78 @@ body {
   border-radius: 5px;
   padding: 8px 12px;
   font-weight: bold;
+}
+
+.toast-container {
+  z-index: 50;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+}
+
+.toast {
+  border-radius: .5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 20rem;
+  margin-bottom: .5rem;
+  padding: 1rem;
+  animation: .5s ease-out forwards fadeIn;
+  display: flex;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
+}
+
+.toast.fading-out {
+  animation: .5s ease-out forwards fadeOut;
+}
+
+.toast__title {
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.toast__message {
+  margin-left: .5rem;
+  font-size: .875rem;
+}
+
+.toast--success {
+  color: #15803d;
+  background-color: #dcfce7;
+}
+
+.toast--error {
+  color: #b91c1c;
+  background-color: #fee2e2;
+}
+
+.toast--info {
+  color: #1e40af;
+  background-color: #dbeafe;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 
 /*# sourceMappingURL=Desktop_Dev_evie_client_src_app_page_51fdcb22.css.map*/
