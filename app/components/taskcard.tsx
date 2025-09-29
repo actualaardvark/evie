@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../page.css';
 
-const TaskCard = ({ task, onComplete, onUncomplete, isCompleted, onEdit }) => {
+const TaskCard = ({ task, onComplete, onUncomplete, isCompleted, onEdit }: {
+  task: { id: number; title: string; body: string };
+  onComplete: (id: number) => void;
+  onUncomplete: (id: number) => void;
+  isCompleted: boolean;
+  onEdit: (id: number) => void;
+}) => {
   const [timeElapsed, setTimeElapsed] = useState('');
 
   useEffect(() => {
@@ -71,7 +77,7 @@ const TaskCard = ({ task, onComplete, onUncomplete, isCompleted, onEdit }) => {
   return (
     <li
       className={`task-card ${isCompleted ? 'completed-card' : ''}`}
-      onClick={!isCompleted ? () => onEdit(task.id) : null}
+      onClick={!isCompleted ? () => onEdit(task.id) : undefined}
     >
       <div className="card-header">
         <h3>{task.title}</h3>
