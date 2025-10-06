@@ -2,10 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import './page.css';
-import TaskCard from './components/taskcard.tsx';
+import TaskCard from './components/taskcard';
 
 class Task {
-  constructor(id, title, body) {
+  id: number;
+  title: string;
+  body: string;
+
+  constructor(id: number, title: string, body: string) {
     this.id = id;
     this.title = title;
     this.body = body;
@@ -243,7 +247,7 @@ const App = () => {
         if (showEditModal) {
           if (event.ctrlKey) {
             event.preventDefault();
-            handleEditTask();
+            handleUpdateTask();
           }
         }
       }

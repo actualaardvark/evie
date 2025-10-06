@@ -1,83 +1,205 @@
 # Overview
 
-This program is a way to organize to-do lists and tasks with the added accountability of messaging your friends (or people of your choice) on discord whenever you finish a task or have been working on the task for a given amount of time.
+This program is a way to organize to-do lists and tasks with the added accountability of messaging your friends (or people of your choice) on Discord whenever you begin or complete a task.
 
-# Installation
+## Features
 
-To get started, clone this repository and install the dependencies for both the server and the client. You'll need two separate terminal windows for this process.
+- Create, edit, and complete tasks
+- Track time spent on each task
+- Discord notifications for task creation and completion
+- View completed tasks history
+- Local storage persistence
+- Keyboard shortcuts for quick actions
 
-1. Install server dependencies:
+## Tech Stack
 
-```bash
-	cd server
-	npm install
+- **Frontend**: Next.js 15.5.2 (App Router), React 19
+- **Styling**: Custom CSS with Tailwind CSS 4
+- **Backend**: Next.js API Routes
+- **Discord Integration**: @discordjs/rest
+- **Language**: TypeScript
+
+## Installation
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- A Discord bot with proper permissions
+
+### Setup
+
+1. **Clone the repository**
+   ```bash
+   gh repo clone apatheticbrick/evie
+   cd evie
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   DISCORD_BOT_TOKEN=your_bot_token_here
+   CHANNEL=your_channel_id_here
+   ```
+
+   To get these values:
+   - **Bot Token**: Create a bot at [Discord Developer Portal](https://discord.com/developers/applications)
+   - **Channel ID**: Enable Developer Mode in Discord, right-click a channel → Copy ID
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open the application**
+   
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Usage
+
+### Keyboard Shortcuts
+
+- `Ctrl+N` - Create new task
+- `Ctrl+Enter` - Save task (when modal is open)
+- `Esc` - Close modal/cancel action
+- `Enter` - Confirm dialog action
+
+### Creating Tasks
+
+1. Click "Add a New Task" or press `Ctrl+N`
+2. Enter a title (required, max 100 characters)
+3. Optionally add a description
+4. Click "Save" or press `Ctrl+Enter`
+
+### Managing Tasks
+
+- **Edit**: Click anywhere on a task card
+- **Complete**: Click the "Complete" button
+- **View Completed**: Click the "Completed Tasks" header to expand/collapse
+- **Uncomplete**: Click "Uncomplete" on a completed task
+
+### Discord Notifications
+
+The app automatically sends Discord messages when you:
+- Create a new task
+- Complete a task
+- Uncomplete a task
+
+## Project Structure
+
 ```
-2. Install client dependencies:
+evie/
+│   app/
+│   ├── api/
+│   │   └── sendMessage/
+│   │       └── route.ts          # Discord API endpoint
+│   ├── components/
+│   │   └── taskcard.tsx          # Task card component
+│   │   └── toast.tsx			  # Toasts
+│   ├── layout.tsx                # Root layout
+│   ├── page.tsx                  # Main app component
+│   ├── page.css                  # Component styles
+│   └── globals.css               # Global styles
+├── .env                              # Environment variables (not tracked)
+├── next.config.ts                    # Next.js configuration
+├── package.json                      # Dependencies
+└── tsconfig.json                     # TypeScript configuration
+```
+
+## Data Storage
+
+Tasks are stored in the browser's `localStorage` with two keys:
+- `tasks` - Active tasks
+- `completedTasks` - Completed tasks
+
+**Note**: Data is stored locally and will be lost if you clear browser data.
+
+## API Endpoints
+
+### POST /api/sendMessage
+
+Sends a message to the configured Discord channel.
+
+**Request Body:**
+```json
+{
+  "message": "Your message here"
+}
+```
+
+**Response:**
+```json
+{
+  "ok": true
+}
+```
+
+**Error Responses:**
+- `400` - Missing message body
+- `500` - Server configuration error or Discord API error
+
+## Development
+
+### Build for Production
+
 ```bash
-	cd ../client
-	npm install
+npm run build
+```
+
+### Start Production Server
+
+```bash
+npm run start
+```
+
+### Linting
+
+```bash
+npm run lint
 ```
 
 ## Configuration
 
-The application uses environment variables to store your Discord bot token and channel info secure.
+The app uses Next.js configuration to ignore TypeScript and ESLint errors during builds (see `next.config.ts`). This is useful for rapid development but should be addressed for production deployments.
 
-Create the file `/server/.env`.
+## Troubleshooting
 
-Copy the following content into the file. You will have to replace the placeholder URLs below with the actual URLs you get from Discord, as well as your Discord token.
-```
-DISCORD_BOT_TOKEN="token goes here"
-CHANNEL="channel number goes here"
-```
+### Discord messages not sending
 
-With that complete, you are ready to...
+1. Verify your bot token is correct in `.env`
+2. Ensure the bot has "Send Messages" permission in the channel
+3. Check the bot is added to your server
+4. Verify the channel ID is correct
 
-# Run the program
+### Tasks not persisting
 
-First, start the development server:
+- Ensure browser localStorage is enabled
+- Check browser console for errors
+- Try a different browser
 
-```bash
-cd client
-npm run dev
-```
-(for now, run everything on the dev server for debugging purposes)
+## Known Limitations
 
-Then, run the backend server, in a seperate terminal:
+- Data is stored locally (no cloud sync)
+- No user authentication/accounts for cross-device compatibility
+- Single Discord channel per deployment
+- No task categories or tags
+- No recurring tasks
 
-```bash
-cd server
-node index.js
-```
+## Future Enhancements
 
-The client will be hosted to [http://localhost:3000](http://localhost:3000). Have fun!
+- Database integration for persistent storage
+- User authentication and multi-user support
+- Task categories and tags (?)
+- Recurring tasks and reminders (?)
+- Mobile support
+- Task sharing and collaboration (?)
 
+## License
 
-# Client
-
-The program is interfaced through the web app.
-
-Get started by adding a new task with the button. Add a title and optional description, then click save to add it to your list. Once you've added your first task, it will appear as a card below, displaying the title, description, and how long you have been working on the given task. From there you are able to edit by clicking anywhere on the card or mark the task complete.
-
-Whenever you create a new task or mark a task complete, the program will send a post request to the backend server, which will in turn message to the channel specified in `.env` via the discord bot.
-
-When you complete a task, the task is not deleted forever but instead goes to a separate `completedTasks` array. You can see and 'uncomplete' a task under the completed tasks dropdown.
-
-# Backend server
-
-The backend sends discord messages by creating an API endpoint on port 3001. When a task is completed on the frontend, it sends a POST request with the relevent message using the built-in `fetch` method.
-
-The API gets the contents of the POST request and reads all the webhook urls starting with `DISCORD_WEBHOOK_URL`. It takes the contents of the message and then uses the discord API to send the message through the bot.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+idk do whatever u want with this ig
