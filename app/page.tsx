@@ -43,7 +43,7 @@ const App = () => {
   }, []);
 
   console.log(tasks);
-
+  //creating functions that can be called later, that way buttons do something.
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -55,6 +55,7 @@ const App = () => {
     // Clear the text when closing
   };
 
+  //confirm modal asks the user to confirm when they want to close the modal with text inside
   const handleOpenConfirmModal = () => {
     setShowConfirmModal(true);
   }
@@ -65,6 +66,7 @@ const App = () => {
     handleCloseEditModal();
   }
 
+  //edit modal allows the user to update tasks
   const handleOpenEditModal = () => {
     setShowEditModal(true);
   }
@@ -80,6 +82,7 @@ const App = () => {
     setShowConfirmModal(false);
   }
 
+  //triggers the confirm modal if there's text in there
   const handleTryCloseModal = () => {
     if (showModal) {
       if (draftTitle === '' && draftBodyText === '') {
@@ -87,6 +90,7 @@ const App = () => {
       } else {
         handleOpenConfirmModal();
       }
+    //if the user is editing, only show the confirm modal if they have edited text
     } else if (showEditModal && editingTask) {
       if (draftTitle === editingTask.title && draftBodyText === editingTask.body) {
         handleCloseEditModal();
@@ -96,6 +100,7 @@ const App = () => {
     }
   };
 
+  //Ping the discord API, then add the new task to the task dictionary, then close the modal.
   const handleAddTask = () => {
     console.log("handleAddTask")
     if (draftTitle.trim() !== '') {
@@ -113,6 +118,7 @@ const App = () => {
     }
   };
 
+  //replace the old task with the new one, then close the edit modal.
   const handleUpdateTask = () => {
     if (draftTitle.trim() !== '' && editingTask) {
       const updatedTasks = tasks.tasks.map(task => 
@@ -125,6 +131,7 @@ const App = () => {
     }
   };
 
+  //Remove the task from the tasks and add it to completed task, then ping the API to send a message to the discord.
   const handleCompleteTask = (id) => {
     const taskToComplete = tasks.tasks.find(task => task.id === id);
     if (taskToComplete) {
@@ -134,6 +141,7 @@ const App = () => {
     sendDiscordMessage(`Evie just completed: "${taskToComplete.title}"!`);
   };
 
+  //Remove the task from completed tasks, add it to tasks, then ping the API.
   const handleUncompleteTask = (id) => {
     const taskToUncomplete = completedTasks.tasks.find(task => task.id === id);
     if (taskToUncomplete) {
@@ -143,6 +151,7 @@ const App = () => {
     }
   };
 
+  //Set the task to edit mode, fill in the title and body text with the text from that task, then show the edit modal
   const handleEditTask = (id) => {
     const taskToEdit = tasks.tasks.find(task => task.id === id);
     if (taskToEdit) {
@@ -153,10 +162,12 @@ const App = () => {
     }
   };
 
+  //basically just for the HTML to work
   const toggleCompletedTasks = () => {
     setShowCompletedTasks(!showCompletedTasks);
   };
 
+  //send a POST request to the backend with the message, then report any errors to the browser console, as well as adding a toast if there is an error.
   const sendDiscordMessage = async (message) => {
     try {
       console.log("sendDiscordMessage");
@@ -168,18 +179,19 @@ const App = () => {
         body: JSON.stringify({ message }),
       });
 
-      // if (response.ok) {
-      //   addToast('Success', 'Task completion logged on Discord.', 'success');
-      // } else {
-      //   const errorData = await response.json();
-      //   addToast('API Error', `Failed to send message: ${errorData.error}`, 'error');
-      // }
+      if (response.ok) {
+        addToast('Success', 'Task completion logged on Discord.', 'success');
+      } else {
+        const errorData = await response.json();
+        addToast('API Error', `Failed to send message: ${errorData.error}`, 'error');
+      }
     } catch (error) {
       console.error('Network or server error:', error);
       addToast('Network or server error', error, 'error');
     }
   };
 
+  //add a toast with the necessary info, then start the timer to make it disappear (for some reason this doesn't fully work yet idk why)
   const addToast = (title, message, type = 'info') => {
     const id = Date.now();
     const newToast = { id, title, message, type, isFadingOut: false };
@@ -200,6 +212,7 @@ const App = () => {
     }, 5000);
   };
 
+  //defines the toast object and the HTML it should output
   const Toast = ({ title, message, type, isFadingOut }) => {
     const className = `toast toast--${type} ${isFadingOut ? 'fading-out' : ''}`;
     return (
@@ -219,13 +232,16 @@ const App = () => {
     </div>
   );
 
+  //localStorage should update every time the task or completed task dictionaries are updated
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
   }, [tasks, completedTasks]);
 
+  //manage some basic keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event) => {
+      //Escape should close the current modal
       if (event.key === 'Escape') {
         console.log("escape key detected")
         if (!showConfirmModal) {
@@ -234,6 +250,7 @@ const App = () => {
           handleConfirmModalCancel();
         }
       }
+      //control+enter should add the task (don't think this works yet because the page overrides it)
       if(event.keyCode === 13) {
         if (showConfirmModal) {
           handleConfirmModalConfirm();
@@ -251,6 +268,7 @@ const App = () => {
           }
         }
       }
+      //control+n should open a new task but agian I don't think this works yet.
       if (event.key === 'n' && (event.ctrlKey)) {
         event.preventDefault();
         handleOpenModal();
@@ -263,6 +281,7 @@ const App = () => {
   }, [handleTryCloseModal, handleOpenModal]); // The effect re-runs when showModal changes
 
   return (
+
     <div className="main-container">
       <h1>Evie stop procrastinating!!!!!!!!!!!</h1>
       <ToastContainer />

@@ -183,13 +183,13 @@ The app uses Next.js configuration to ignore TypeScript and ESLint errors during
 - Check browser console for errors
 - Try a different browser
 
-## Known Limitations
+## Known Bugs/limitations
 
-- Data is stored locally (no cloud sync)
-- No user authentication/accounts for cross-device compatibility
-- Single Discord channel per deployment
-- No task categories or tags
-- No recurring tasks
+- Some visual weirdness with the toast animation and formatting
+- Data is stored locally (no cloud sync), meaning cross-platform is currently impossible
+- No authentification
+- Single Discord channel per deployment, different users can't send to different discord servers/channels, or one user can't choose which channel to send to
+- Discord messages are hardcoded to include Evie's name which is probably bad.
 
 ## Future Enhancements
 

@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     const token = process.env.DISCORD_BOT_TOKEN;
     const channelId = process.env.CHANNEL;
 
+    //check for the necessary tokens
     if (!token || !channelId) {
       return NextResponse.json({ error: 'Server is missing Discord configuration.' }, { status: 500 });
     }
@@ -30,6 +31,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
+    //returns any errors
     console.error('Failed to send Discord message', error);
     return NextResponse.json({ error: 'Failed to send message.' }, { status: 500 });
   }
